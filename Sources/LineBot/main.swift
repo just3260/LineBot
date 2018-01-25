@@ -17,12 +17,17 @@ drop.post("callback"){ req in
         return Response(status: .ok, body: "this message is not supported")
     }
     
-    guard let message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
+    guard var message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
         return Response(status: .ok, body: "this message is not supported")
     }
     
     print("-----------------");
     print(message);
+    
+    
+    if (message.contains("黑人")){
+        message = "是誰在講話？！"
+    }
     
     var requestData: JSON = JSON()
     try requestData.set("replyToken", replyToken)
