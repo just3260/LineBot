@@ -3,7 +3,7 @@ import Vapor
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
-let accessToken = "+/MorVuHNlwb49eAcx1XP3rLdHkJQ3RzNc20Gd8K2FE4+fRYQSUcoC/5JJ0LBWTZ6uj6lTIIn9hEMIc4LkGkyp2bHKfOS0J5/r2hAaty/Ooqeto9A2Swy4gPHsdX+r8GP0YB6fPQ1r7ITT4gg7LCkwdB04t89/1O/w1cDnyilFU="
+let accessToken = "uNha8IMsykz/XoGmQhuWyvqVc6Ta36vi1yVCx16jH6Dfwu17iaJrQXZqipY8fgvMrxrxvtNcRKpVpmP/XyUtewpgpm40oQFxPSbaZDUbqb+mKSydSvjDgtbBxnKD+w/VrLugyzamDrBmgG7lw4lV/wdB04t89/1O/w1cDnyilFU="
 
 drop.get("hello") { req in
     print(req)
