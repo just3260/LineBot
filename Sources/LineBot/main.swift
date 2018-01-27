@@ -30,10 +30,20 @@ drop.post("callback"){ req in
     }
     
     var requestData: JSON = JSON()
-    try requestData.set("replyToken", replyToken)
-    try requestData.set("messages", [
-        ["type": "text", "text": message]
-        ])
+    
+    if (message == "抽"){
+        try requestData.set("replyToken", replyToken)
+        try requestData.set("messages", [
+            ["type": "image",
+             "originalContentUrl": "https://evobsession.com/wp-content/uploads/2017/01/Tesla-Model-3-red.png",
+             "previewImageUrl": "https://www.google.com.tw/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwi_94uZ5PjYAhXKyrwKHSzYCjsQjRwIBw&url=https%3A%2F%2Feucbeniki.sio.si%2Ffizika9%2F174%2Findex4.html&psig=AOvVaw2xDZL6ry45eRC9o7hQZ-cF&ust=1517164442331891"]
+            ])
+    } else {
+        try requestData.set("replyToken", replyToken)
+        try requestData.set("messages", [
+            ["type": "text", "text": message]
+            ])
+    }
     
     let response: Response = try drop.client.post(
         endpoint,
