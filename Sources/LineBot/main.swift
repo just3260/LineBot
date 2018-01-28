@@ -72,6 +72,100 @@ drop.post("callback"){ req in
         
         
         
+    } else if (message == "給我妹子"){
+        
+//        return Response(status: .ok, body: "reply")
+        
+        var index: String = ""
+        var beautyPageArray = [String]()
+        var imgurUrlArray = [String]()
+        
+        // 取得表特最新頁面的index
+        let indexHtml = try drop.client.get("https://www.ptt.cc/bbs/Beauty/index.html")
+
+        let indexHtmlString = indexHtml.description
+        let indexRange = indexHtmlString.range(of: ".html\">&lsaquo; 上頁")
+        if let range = indexRange {
+            let number = indexHtmlString.prefix(upTo: range.lowerBound)
+            guard let lastNum = Int(number.suffix(4)) else {
+                return Response(status: .ok, body: "this message is not supported")
+            }
+            index = String(lastNum + 1)
+            print(index)  // 取得當前的index
+        }
+        
+        // 撈出所有貼文
+        let beauty = try drop.client.get("https://www.ptt.cc/bbs/Beauty/index\(index).html")
+        var beautyString = beauty.description
+        
+        while(beautyString.contains("<a href=\"/bbs/Beauty/")){
+            let beautyRange = beautyString.range(of: "<a href=\"/bbs/Beauty/")
+            let lessBeauty = beautyString.suffix(from: (beautyRange?.upperBound)!)
+            let imgurKey = String(lessBeauty.prefix(29))
+            beautyPageArray.append(imgurKey)
+            beautyString = String(lessBeauty)
+        }
+        
+        // 將公告文排除
+        var i = 0
+        for imgur in beautyPageArray {
+            if(imgur.contains("公告")){
+                beautyPageArray.remove(at: i)
+                continue
+            } else {
+                let imgurKey = String(imgur.prefix(18))
+                beautyPageArray.remove(at: i)
+                beautyPageArray.insert(imgurKey, at: i)
+            }
+            i = i + 1
+        }
+        
+        // 撈出每則貼文的imgur網址
+        for imgurUrl in beautyPageArray {
+            let beauty = try drop.client.get("https://www.ptt.cc/bbs/Beauty/\(imgurUrl).html")
+            var beautyString = beauty.description
+            
+            while(beautyString.contains("imgur.com/")){
+                let beautyRange = beautyString.range(of: "imgur.com/")
+                let lessBeauty = beautyString.suffix(from: (beautyRange?.upperBound)!)
+                let imgurKey = String(lessBeauty.prefix(7))
+                if(imgurKey != "min/emb"){
+                    let url = "https://i.imgur.com/\(imgurKey).jpg"
+                    imgurUrlArray.append(url)
+                }
+                beautyString = String(lessBeauty)
+            }
+        }
+        
+        // 將重複的值去掉
+        var dictInts = Dictionary<String, String>()
+        for number in imgurUrlArray {
+            dictInts[String(number)] = number
+        }
+        var result = [String]()
+        for value in dictInts.values {
+            result.append(value)
+        }
+        
+        // 從陣列中隨機抽出圖片
+        let temp = randomInt(range: result.count)
+        let picture = result[temp]
+
+        try requestData.set("replyToken", replyToken)
+        try requestData.set("messages", [
+            ["type": "text", "text": "我去物色一下妹子.."],
+            ["type": "image",
+             "originalContentUrl": result[temp],
+             "previewImageUrl": result[temp]
+            ],["type": "image",
+               "originalContentUrl": result[temp+1],
+               "previewImageUrl": result[temp+1]
+            ],["type": "image",
+               "originalContentUrl": result[temp-1],
+               "previewImageUrl": result[temp-1]
+            ]])
+
+        
     } else {
         try requestData.set("replyToken", replyToken)
         try requestData.set("messages", [
@@ -89,7 +183,6 @@ drop.post("callback"){ req in
         requestData
     )
     
-    print(response)
     return Response(status: .ok, body: "reply")
 }
 
