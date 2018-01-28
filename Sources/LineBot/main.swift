@@ -1,6 +1,13 @@
 import Vapor
 
 
+public func randomInt(min: Int, max:Int) -> Int {
+    #if os(Linux)
+        return Glibc.random() % max
+    #else
+        return min + Int(arc4random_uniform(UInt32(max - min + 1)))
+    #endif
+}
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
@@ -49,9 +56,8 @@ drop.post("callback"){ req in
         guard let imgurData = imgur.data["data"]?.array else {
             return Response(status: .ok, body: "this message is not supported")
         }
-        
-        let imgurCount = UInt32(imgurData.count)
-        let temp = Int(arc4random()%imgurCount)
+    
+        let temp = randomInt(min: 0, max: imgurData.count-1)
         
         guard let picture = imgurData[temp].object?["link"] else {
             return Response(status: .ok, body: "this message is not supported")
@@ -86,6 +92,9 @@ drop.post("callback"){ req in
     print(response)
     return Response(status: .ok, body: "reply")
 }
+
+
+
 
 try drop.run()
 
