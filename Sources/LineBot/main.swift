@@ -1,11 +1,11 @@
 import Vapor
 
 
-public func randomInt(min: Int, max:Int) -> Int {
+public func randomInt(range:Int) -> Int {
     #if os(Linux)
-        return Glibc.random() % max
+        return Glibc.random() % range
     #else
-        return min + Int(arc4random_uniform(UInt32(max - min + 1)))
+        return Int(arc4random_uniform(UInt32(range)))
     #endif
 }
 
@@ -57,7 +57,7 @@ drop.post("callback"){ req in
             return Response(status: .ok, body: "this message is not supported")
         }
     
-        let temp = randomInt(min: 0, max: imgurData.count-1)
+        let temp = randomInt(range: imgurData.count)
         
         guard let picture = imgurData[temp].object?["link"] else {
             return Response(status: .ok, body: "this message is not supported")
