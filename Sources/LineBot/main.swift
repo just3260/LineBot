@@ -148,21 +148,22 @@ drop.post("callback"){ req in
         }
         
         // 從陣列中隨機抽出圖片
-        let temp = randomInt(range: result.count)
-        let picture = result[temp]
-
+        let picture1 = result[randomInt(range: result.count)]
+        let picture2 = result[randomInt(range: result.count)]
+        let picture3 = result[randomInt(range: result.count)]
+        
         try requestData.set("replyToken", replyToken)
         try requestData.set("messages", [
-            ["type": "text", "text": "我去物色一下妹子.."],
+            ["type": "text", "text": "好的，老爺 我去物色一下妹子.."],
             ["type": "image",
-             "originalContentUrl": result[temp],
-             "previewImageUrl": result[temp]
+             "originalContentUrl": picture1,
+             "previewImageUrl": picture1
             ],["type": "image",
-               "originalContentUrl": result[temp+1],
-               "previewImageUrl": result[temp+1]
+               "originalContentUrl": picture2,
+               "previewImageUrl": picture2
             ],["type": "image",
-               "originalContentUrl": result[temp-1],
-               "previewImageUrl": result[temp-1]
+               "originalContentUrl": picture3,
+               "previewImageUrl": picture3
             ]])
 
         
