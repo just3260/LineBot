@@ -1,6 +1,7 @@
 import Vapor
 
 
+
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
 let accessToken = "uNha8IMsykz/XoGmQhuWyvqVc6Ta36vi1yVCx16jH6Dfwu17iaJrQXZqipY8fgvMrxrxvtNcRKpVpmP/XyUtewpgpm40oQFxPSbaZDUbqb+mKSydSvjDgtbBxnKD+w/VrLugyzamDrBmgG7lw4lV/wdB04t89/1O/w1cDnyilFU="
@@ -36,15 +37,35 @@ drop.post("callback"){ req in
         try requestData.set("messages", [
             ["type": "image",
              "originalContentUrl": "https://i.imgur.com/FYKYN6u.jpg",
-             "previewImageUrl": "https://i.imgur.com/FYKYN6us.jpg"]
+             "previewImageUrl": "https://i.imgur.com/FYKYN6u.jpg"]
             ])
-    } else if (message == "抽帥哥"){
+    } else if (message == "❤️"){
+        
+        let imgur = try drop.client.get("https://api.imgur.com/3/album/Ne2W5/images", query: [
+            
+            :],[
+            "Authorization" : "Client-ID e9a5ed48901c361"
+            ])
+        guard let imgurData = imgur.data["data"]?.array else {
+            return Response(status: .ok, body: "this message is not supported")
+        }
+        
+        let imgurCount = UInt32(imgurData.count)
+        let temp = Int(arc4random()%imgurCount)
+        
+        guard let picture = imgurData[temp].object?["link"] else {
+            return Response(status: .ok, body: "this message is not supported")
+        }
+        
         try requestData.set("replyToken", replyToken)
         try requestData.set("messages", [
             ["type": "image",
-             "originalContentUrl": "https://i.imgur.com/FYKYN6u.jpg",
-             "previewImageUrl": "https://i.imgur.com/FYKYN6u.jpg"]
+             "originalContentUrl": picture,
+             "previewImageUrl": picture]
             ])
+        
+        
+        
     } else {
         try requestData.set("replyToken", replyToken)
         try requestData.set("messages", [
