@@ -93,7 +93,7 @@ drop.post("callback"){ req in
         // 將公告文排除
         var i = 0
         for imgur in beautyPageArray {
-            if(imgur.contains("公告")){
+            if(imgur.contains("公告")||imgur.contains("帥哥")){
                 beautyPageArray.remove(at: i)
                 continue
             } else {
