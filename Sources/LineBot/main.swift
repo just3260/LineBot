@@ -31,24 +31,12 @@ drop.post("callback"){ req in
     
     print("-----------------");
     print(message);
-    
-    
-    if (message.contains("黑人")){
-        message = "是誰在講話？！"
-    }
-    
+
     var requestData: JSON = JSON()
     
     if (message == "抽"){
-        try requestData.set("replyToken", replyToken)
-        try requestData.set("messages", [
-            ["type": "image",
-             "originalContentUrl": "https://i.imgur.com/FYKYN6u.jpg",
-             "previewImageUrl": "https://i.imgur.com/FYKYN6u.jpg"]
-            ])
-    } else if (message == "❤️"){
         
-        let imgur = try drop.client.get("https://api.imgur.com/3/album/Ne2W5/images", query: [
+        let imgur = try drop.client.get("https://api.imgur.com/3/album/mgKOf/images", query: [
             
             :],[
             "Authorization" : "Client-ID e9a5ed48901c361"
@@ -70,12 +58,8 @@ drop.post("callback"){ req in
              "previewImageUrl": picture]
             ])
         
-        
-        
     } else if (message == "給我妹子"){
-        
-//        return Response(status: .ok, body: "reply")
-        
+
         var index: String = ""
         var beautyPageArray = [String]()
         var imgurUrlArray = [String]()
@@ -154,7 +138,7 @@ drop.post("callback"){ req in
         
         try requestData.set("replyToken", replyToken)
         try requestData.set("messages", [
-            ["type": "text", "text": "好的，老爺 我去物色一下妹子.."],
+            ["type": "text", "text": "好的，歐巴😘\n我去物色一下妹子.."],
             ["type": "image",
              "originalContentUrl": picture1,
              "previewImageUrl": picture1
@@ -167,12 +151,14 @@ drop.post("callback"){ req in
             ]])
 
         
-    } else {
+    } else if (message.contains("黑人")||message.contains("歐郎")||message.contains("黑鬼")){
+        
         try requestData.set("replyToken", replyToken)
         try requestData.set("messages", [
-            ["type": "text", "text": message]
+            ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
     }
+    
     
     let response: Response = try drop.client.post(
         endpoint,
@@ -184,6 +170,7 @@ drop.post("callback"){ req in
         requestData
     )
     
+    print(response)
     return Response(status: .ok, body: "reply")
 }
 
