@@ -197,12 +197,14 @@ drop.post("callback"){ req in
         let carousel = imageCarousel(template: temp)
         
         let encoder = JSONEncoder()
-        let data = try encoder.encode(carousel)
+        let data = try! encoder.encode(carousel)
         
         print(data)
 
         try responseData.set("replyToken", replyToken)
         try responseData.set("messages", data)
+        
+        print(responseData)
 
         
     } else if (message.contains("黑人")||message.contains("歐郎")||message.contains("黑鬼")){
