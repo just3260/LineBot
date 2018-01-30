@@ -202,11 +202,12 @@ drop.post("callback"){ req in
         guard let string = String(data: data, encoding: .utf8) else {
             return Response(status: .ok, body: "this message is not supported")
         }
+        
+        let serialized: String = "{\"replyToken\":\"\(replyToken)\",\"messages\":[{\"type\":\"template\",\"template\":{\"type\":\"image_carousel\",\"columns\":[{\"action\":{\"type\":\"uri\",\"label\":\"Open\",\"uri\":\"https://www.google.com.tw\"},\"imageUrl\":\"https://i.imgur.com/jMXpp2p.jpg\"},{\"action\":{\"type\":\"uri\",\"label\":\"Open\",\"uri\":\"https://www.google.com.tw\"},\"imageUrl\":\"https://i.imgur.com/aZuHokv.jpg\"},{\"action\":{\"type\":\"uri\",\"label\":\"Open\",\"uri\":\"https://www.google.com.tw\"},\"imageUrl\":\"https://i.imgur.com/8SoAbqF.jpg\"}]}}]}"
+        let json = try JSON(bytes: serialized.bytes)
+//        print(json)
 
-        try responseData.set("replyToken", replyToken)
-        try responseData.set("messages", [string
-            
-            ])
+        responseData = json
         
         print(responseData)
 
