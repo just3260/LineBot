@@ -25,7 +25,7 @@ drop.post("callback"){ req in
         return Response(status: .ok, body: "this message is not supported")
     }
     
-    guard var message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
+    guard let message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
         return Response(status: .ok, body: "this message is not supported")
     }
     
