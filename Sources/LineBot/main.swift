@@ -1,5 +1,6 @@
 import Vapor
 import Foundation
+import JSON
 
 
 public func randomInt(range:Int) -> Int {
@@ -198,11 +199,14 @@ drop.post("callback"){ req in
         
         let encoder = JSONEncoder()
         let data = try! encoder.encode(carousel)
-        
-        print(data)
+        guard let string = String(data: data, encoding: .utf8) else {
+            return Response(status: .ok, body: "this message is not supported")
+        }
 
         try responseData.set("replyToken", replyToken)
-        try responseData.set("messages", data)
+        try responseData.set("messages", [string
+            
+            ])
         
         print(responseData)
 
