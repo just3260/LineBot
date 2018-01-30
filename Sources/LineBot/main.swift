@@ -12,49 +12,49 @@ public func randomInt(range:Int) -> Int {
 }
 
 
-struct button: Codable {
-    let type: String = "uri"
-    let label: String = "Open"
-    var uri: String
-    
-    init(uri: String){
-        self.uri = uri
-    }
-}
-
-struct column: Codable {
-    var imageUrl: String
-    var action: button
-    
-    init(imageUrl: String, action: button) {
-        self.imageUrl = imageUrl
-        self.action = action
-    }
-}
-
-
-struct template: Codable {
-    let type: String = "image_carousel"
-    var columns: [column]
-    
-    init(columns: [column] = [column]()) {
-        self.columns = columns
-    }
-    
-    mutating func addColumn(relative column: column) {
-        columns.append(column)
-    }
-}
-
-
-struct imageCarousel: Codable {
-    let type: String = "template"
-    var template: template
-    
-    init(template: template) {
-        self.template = template
-    }
-}
+//struct button: Codable {
+//    let type: String = "uri"
+//    let label: String = "Open"
+//    var uri: String
+//
+//    init(uri: String){
+//        self.uri = uri
+//    }
+//}
+//
+//struct column: Codable {
+//    var imageUrl: String
+//    var action: button
+//
+//    init(imageUrl: String, action: button) {
+//        self.imageUrl = imageUrl
+//        self.action = action
+//    }
+//}
+//
+//
+//struct template: Codable {
+//    let type: String = "image_carousel"
+//    var columns: [column]
+//
+//    init(columns: [column] = [column]()) {
+//        self.columns = columns
+//    }
+//
+//    mutating func addColumn(relative column: column) {
+//        columns.append(column)
+//    }
+//}
+//
+//
+//struct imageCarousel: Codable {
+//    let type: String = "template"
+//    var template: template
+//
+//    init(template: template) {
+//        self.template = template
+//    }
+//}
 
 
 
@@ -182,32 +182,52 @@ drop.post("callback"){ req in
         }
         
         
-        // 點擊連結的網址
-        let imageButton = button(uri: "https://www.google.com.tw")
+//        // 點擊連結的網址
+//        let imageButton = button(uri: "https://www.google.com.tw")
+//
+//        // 從陣列中隨機抽出圖片
+//        let column1 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+//        let column2 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+//        let column3 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+//
+//        var temp = template()
+//        temp.addColumn(relative: column1)
+//        temp.addColumn(relative: column2)
+//        temp.addColumn(relative: column3)
+//
+//        let carousel = imageCarousel(template: temp)
+//
+//        let encoder = JSONEncoder()
+//        let data = try! encoder.encode(carousel)
+//        guard let string = String(data: data, encoding: .utf8) else {
+//            return Response(status: .ok, body: "this message is not supported")
+//        }
+        let mainPage = "https://www.ptt.cc/bbs/Beauty/index.html"
+        let picture1 = result[randomInt(range: result.count)]
+        let picture2 = result[randomInt(range: result.count)]
+        let picture3 = result[randomInt(range: result.count)]
         
-        // 從陣列中隨機抽出圖片
-        let column1 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
-        let column2 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
-        let column3 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
-        
-        var temp = template()
-        temp.addColumn(relative: column1)
-        temp.addColumn(relative: column2)
-        temp.addColumn(relative: column3)
-        
-        let carousel = imageCarousel(template: temp)
-        
-        let encoder = JSONEncoder()
-        let data = try! encoder.encode(carousel)
-        guard let string = String(data: data, encoding: .utf8) else {
-            return Response(status: .ok, body: "this message is not supported")
-        }
-        
-        let serialized: String = "{\"replyToken\":\"\(replyToken)\",\"messages\":[{\"type\":\"template\",\"template\":{\"type\":\"image_carousel\",\"columns\":[{\"action\":{\"type\":\"uri\",\"label\":\"Open\",\"uri\":\"https://www.google.com.tw\"},\"imageUrl\":\"https://i.imgur.com/jMXpp2p.jpg\"},{\"action\":{\"type\":\"uri\",\"label\":\"Open\",\"uri\":\"https://www.google.com.tw\"},\"imageUrl\":\"https://i.imgur.com/aZuHokv.jpg\"},{\"action\":{\"type\":\"uri\",\"label\":\"Open\",\"uri\":\"https://www.google.com.tw\"},\"imageUrl\":\"https://i.imgur.com/8SoAbqF.jpg\"}]}}]}"
-        let json = try JSON(bytes: serialized.bytes)
-//        print(json)
-
-        responseData = json
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", [
+            ["type": "template",
+             "template": [
+                "type": "image_carousel",
+                "columns": [
+                    ["imageUrl": picture1,
+                     "action": ["type": "uri",
+                                "label": "Open",
+                                "uri": mainPage]],
+                    ["imageUrl": picture2,
+                     "action": ["type": "uri",
+                                "label": "Open",
+                                "uri": mainPage]],
+                    ["imageUrl": picture3,
+                     "action": ["type": "uri",
+                                "label": "Open",
+                                "uri": mainPage]]
+                ]
+            ]]
+        ])
         
         print(responseData)
 
