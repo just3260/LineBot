@@ -198,11 +198,6 @@ drop.post("callback"){ req in
         
         let encoder = JSONEncoder()
         let data = try encoder.encode(carousel)
-        
-        guard let stringData = String(data: data, encoding: .utf8) else {
-            return Response(status: .ok, body: "this message is not supported")
-        }
-        print(stringData)
 
         try responseData.set("replyToken", replyToken)
         try responseData.set("messages", data)
