@@ -1,4 +1,5 @@
 import Vapor
+import Foundation
 
 
 public func randomInt(range:Int) -> Int {
@@ -8,6 +9,54 @@ public func randomInt(range:Int) -> Int {
         return Int(arc4random_uniform(UInt32(range)))
     #endif
 }
+
+
+struct button: Codable {
+    let type: String = "uri"
+    let label: String = "Open"
+    var uri: String
+    
+    init(uri: String){
+        self.uri = uri
+    }
+}
+
+struct column: Codable {
+    var imageUrl: String
+    var action: button
+    
+    init(imageUrl: String, action: button) {
+        self.imageUrl = imageUrl
+        self.action = action
+    }
+}
+
+
+struct template: Codable {
+    let type: String = "image_carousel"
+    var columns: [column]
+    
+    init(columns: [column] = [column]()) {
+        self.columns = columns
+    }
+    
+    mutating func addColumn(relative column: column) {
+        columns.append(column)
+    }
+}
+
+
+struct imageCarousel: Codable {
+    let type: String = "template"
+    var template: template
+    
+    init(template: template) {
+        self.template = template
+    }
+}
+
+
+
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
@@ -32,7 +81,7 @@ drop.post("callback"){ req in
     print("-----------------");
     print(message);
 
-    var requestData: JSON = JSON()
+    var responseData: JSON = JSON()
     
     if (message == "抽"){
         
@@ -51,8 +100,8 @@ drop.post("callback"){ req in
             return Response(status: .ok, body: "this message is not supported")
         }
         
-        try requestData.set("replyToken", replyToken)
-        try requestData.set("messages", [
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", [
             ["type": "image",
              "originalContentUrl": picture,
              "previewImageUrl": picture]
@@ -131,30 +180,38 @@ drop.post("callback"){ req in
             result.append(value)
         }
         
-        // 從陣列中隨機抽出圖片
-        let picture1 = result[randomInt(range: result.count)]
-        let picture2 = result[randomInt(range: result.count)]
-        let picture3 = result[randomInt(range: result.count)]
         
-        try requestData.set("replyToken", replyToken)
-        try requestData.set("messages", [
-            ["type": "text", "text": "好的，歐巴😘\n我去物色一下妹子.."],
-            ["type": "image",
-             "originalContentUrl": picture1,
-             "previewImageUrl": picture1
-            ],["type": "image",
-               "originalContentUrl": picture2,
-               "previewImageUrl": picture2
-            ],["type": "image",
-               "originalContentUrl": picture3,
-               "previewImageUrl": picture3
-            ]])
+        // 點擊連結的網址
+        let imageButton = button(uri: "https://www.google.com.tw")
+        
+        // 從陣列中隨機抽出圖片
+        let column1 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+        let column2 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+        let column3 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+        
+        var temp = template()
+        temp.addColumn(relative: column1)
+        temp.addColumn(relative: column2)
+        temp.addColumn(relative: column3)
+        
+        let carousel = imageCarousel(template: temp)
+        
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(carousel)
+        
+        guard let stringData = String(data: data, encoding: .utf8) else {
+            return Response(status: .ok, body: "this message is not supported")
+        }
+        print(stringData)
+
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", data)
 
         
     } else if (message.contains("黑人")||message.contains("歐郎")||message.contains("黑鬼")){
         
-        try requestData.set("replyToken", replyToken)
-        try requestData.set("messages", [
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", [
             ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
     }
@@ -167,7 +224,7 @@ drop.post("callback"){ req in
             "Content-Type": "application/json",
             "Authorization": "Bearer \(accessToken)"
         ],
-        requestData
+        responseData
     )
     
     print(response)
