@@ -210,6 +210,7 @@ drop.post("callback"){ req in
         try responseData.set("replyToken", replyToken)
         try responseData.set("messages", [
             ["type": "template",
+             "altText": "this is a image carousel template",
              "template": [
                 "type": "image_carousel",
                 "columns": [
