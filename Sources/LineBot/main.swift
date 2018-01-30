@@ -203,9 +203,9 @@ drop.post("callback"){ req in
 //            return Response(status: .ok, body: "this message is not supported")
 //        }
         let mainPage = "https://www.ptt.cc/bbs/Beauty/index.html"
-        let picture1 = result[randomInt(range: result.count)]
-        let picture2 = result[randomInt(range: result.count)]
-        let picture3 = result[randomInt(range: result.count)]
+//        let picture1 = result[randomInt(range: result.count)]
+//        let picture2 = result[randomInt(range: result.count)]
+//        let picture3 = result[randomInt(range: result.count)]
         
         try responseData.set("replyToken", replyToken)
         try responseData.set("messages", [
@@ -214,15 +214,23 @@ drop.post("callback"){ req in
              "template": [
                 "type": "image_carousel",
                 "columns": [
-                    ["imageUrl": picture1,
+                    ["imageUrl": result[randomInt(range: result.count)],
                      "action": ["type": "uri",
                                 "label": "Open",
                                 "uri": mainPage]],
-                    ["imageUrl": picture2,
+                    ["imageUrl": result[randomInt(range: result.count)],
                      "action": ["type": "uri",
                                 "label": "Open",
                                 "uri": mainPage]],
-                    ["imageUrl": picture3,
+                    ["imageUrl": result[randomInt(range: result.count)],
+                     "action": ["type": "uri",
+                                "label": "Open",
+                                "uri": mainPage]],
+                    ["imageUrl": result[randomInt(range: result.count)],
+                     "action": ["type": "uri",
+                                "label": "Open",
+                                "uri": mainPage]],
+                    ["imageUrl": result[randomInt(range: result.count)],
                      "action": ["type": "uri",
                                 "label": "Open",
                                 "uri": mainPage]]
