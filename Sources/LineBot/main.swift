@@ -229,15 +229,15 @@ drop.post("callback"){ req in
         responseData
     )
     
-    let ask: Response = try drop.client.post(
-        push,
-        query: ["name": "mybot"],
-        [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(accessToken)"
-        ],
-        pushData
-    )
+//    let ask: Response = try drop.client.post(
+//        push,
+//        query: ["name": "mybot"],
+//        [
+//            "Content-Type": "application/json",
+//            "Authorization": "Bearer \(accessToken)"
+//        ],
+//        pushData
+//    )
     
     print(response)
     return Response(status: .ok, body: "reply")
