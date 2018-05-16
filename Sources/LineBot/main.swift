@@ -212,11 +212,11 @@ drop.post("callback"){ req in
     }
     
     // push Data
-    var pushData: JSON = JSON()
-    try pushData.set("to", userID)
-    try pushData.set("messages", [
-        ["type": "text", "text": "我他媽的成功啦！！！"]
-        ])
+//    var pushData: JSON = JSON()
+//    try pushData.set("to", userID)
+//    try pushData.set("messages", [
+//        ["type": "text", "text": "我他媽的成功啦！！！"]
+//        ])
     
     
     let response: Response = try drop.client.post(
