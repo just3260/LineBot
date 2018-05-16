@@ -204,20 +204,8 @@ drop.post("callback"){ req in
         try responseData.set("messages", [
             ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
-    } else if (message == "你是誰"){
-        try responseData.set("replyToken", replyToken)
-        try responseData.set("messages", [
-            ["type": "text", "text": "\(userID)"]
-            ])
     }
-    
-    // push Data
-//    var pushData: JSON = JSON()
-//    try pushData.set("to", userID)
-//    try pushData.set("messages", [
-//        ["type": "text", "text": "我他媽的成功啦！！！"]
-//        ])
-    
+
     
     let response: Response = try drop.client.post(
         endpoint,
@@ -228,16 +216,7 @@ drop.post("callback"){ req in
         ],
         responseData
     )
-    
-//    let ask: Response = try drop.client.post(
-//        push,
-//        query: ["name": "mybot"],
-//        [
-//            "Content-Type": "application/json",
-//            "Authorization": "Bearer \(accessToken)"
-//        ],
-//        pushData
-//    )
+
     
     print(response)
     return Response(status: .ok, body: "reply")
