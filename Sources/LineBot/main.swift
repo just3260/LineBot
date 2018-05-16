@@ -12,55 +12,10 @@ public func randomInt(range:Int) -> Int {
 }
 
 
-//struct button: Codable {
-//    let type: String = "uri"
-//    let label: String = "Open"
-//    var uri: String
-//
-//    init(uri: String){
-//        self.uri = uri
-//    }
-//}
-//
-//struct column: Codable {
-//    var imageUrl: String
-//    var action: button
-//
-//    init(imageUrl: String, action: button) {
-//        self.imageUrl = imageUrl
-//        self.action = action
-//    }
-//}
-//
-//
-//struct template: Codable {
-//    let type: String = "image_carousel"
-//    var columns: [column]
-//
-//    init(columns: [column] = [column]()) {
-//        self.columns = columns
-//    }
-//
-//    mutating func addColumn(relative column: column) {
-//        columns.append(column)
-//    }
-//}
-//
-//
-//struct imageCarousel: Codable {
-//    let type: String = "template"
-//    var template: template
-//
-//    init(template: template) {
-//        self.template = template
-//    }
-//}
-
-
-
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
+let push = "https://api.line.me/v2/bot/message/push"
 let accessToken = "OoFdWpqFaiTweCAZ78pVaxcGsNJrzBob0MFrQxHjbmFZmf3Hf1Mr0Z3Rt+CNdWBPHDAPkdCIlLOFfgfPcb22SPqx67yqhD+GBcwWhijCFmwUznCZxhe6Y8cM/HYp/JCyR/7pWcr17f+mab4gBM3ZtgdB04t89/1O/w1cDnyilFU="
 
 drop.get("hello") { req in
@@ -75,7 +30,9 @@ drop.post("callback"){ req in
         return Response(status: .ok, body: "this message is not supported")
     }
     
-    guard let message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
+    guard let message = object["message"]?.object?["text"]?.string,
+          let replyToken = object["replyToken"]?.string,
+          let userID = object["source"]?.object?["userID"]?.string else{
         return Response(status: .ok, body: "this message is not supported")
     }
     
@@ -247,7 +204,19 @@ drop.post("callback"){ req in
         try responseData.set("messages", [
             ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
+    } else if (message == "你是誰"){
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", [
+            ["type": "text", "text": "\(userID)"]
+            ])
     }
+    
+    // push Data
+    var pushData: JSON = JSON()
+    try pushData.set("to", userID)
+    try pushData.set("messages", [
+        ["type": "text", "text": "我他媽的成功啦！！！"]
+        ])
     
     
     let response: Response = try drop.client.post(
@@ -258,6 +227,16 @@ drop.post("callback"){ req in
             "Authorization": "Bearer \(accessToken)"
         ],
         responseData
+    )
+    
+    let ask: Response = try drop.client.post(
+        push,
+        query: ["name": "mybot"],
+        [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(accessToken)"
+        ],
+        pushData
     )
     
     print(response)
