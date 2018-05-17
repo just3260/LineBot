@@ -2,7 +2,6 @@ import Vapor
 import Foundation
 import JSON
 
-
 public func randomInt(range:Int) -> Int {
     #if os(Linux)
         return Glibc.random() % range
@@ -12,64 +11,62 @@ public func randomInt(range:Int) -> Int {
 }
 
 
-//struct button: Codable {
-//    let type: String = "uri"
-//    let label: String = "Open"
-//    var uri: String
-//
-//    init(uri: String){
-//        self.uri = uri
-//    }
-//}
-//
-//struct column: Codable {
-//    var imageUrl: String
-//    var action: button
-//
-//    init(imageUrl: String, action: button) {
-//        self.imageUrl = imageUrl
-//        self.action = action
-//    }
-//}
-//
-//
-//struct template: Codable {
-//    let type: String = "image_carousel"
-//    var columns: [column]
-//
-//    init(columns: [column] = [column]()) {
-//        self.columns = columns
-//    }
-//
-//    mutating func addColumn(relative column: column) {
-//        columns.append(column)
-//    }
-//}
-//
-//
-//struct imageCarousel: Codable {
-//    let type: String = "template"
-//    var template: template
-//
-//    init(template: template) {
-//        self.template = template
-//    }
-//}
-
-
-
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
 let accessToken = "OoFdWpqFaiTweCAZ78pVaxcGsNJrzBob0MFrQxHjbmFZmf3Hf1Mr0Z3Rt+CNdWBPHDAPkdCIlLOFfgfPcb22SPqx67yqhD+GBcwWhijCFmwUznCZxhe6Y8cM/HYp/JCyR/7pWcr17f+mab4gBM3ZtgdB04t89/1O/w1cDnyilFU="
 
-let push = "https://api.line.me/v2/bot/message/push"
+let channelSecret = "496c110eb6db3d1af4918c41647b45ab"
 
 
 drop.get("hello") { req in
     print(req)
     return "Hello Vapor!!!"
 }
+
+drop.post("callback") { request in
+    
+    let bot = LineBot(accessToken: accessToken, channelSecret: channelSecret)
+    
+    guard let content = request.body.bytes?.makeString() else {
+        return Response(status: .badRequest)
+    }
+    
+//    guard let signature = request.headers["X-Line-Signature"] else {
+//        return Response(status: .badRequest)
+//    }
+    
+//    guard bot.validateSignature(content: content, signature: signature) else {
+//        return Response(status: .badRequest)
+//    }
+    
+    guard let events = bot.parseEventsFrom(requestBody: content) else {
+        return Response(status: .badRequest)
+    }
+    
+    for event in events {
+        switch event {
+        case .message(let message):
+            let replyToken = message.replyToken
+            switch message.message {
+            case .text(let content):
+                bot.reply(token: replyToken, messages: [.text(text: content.text)])
+            case _:
+                break
+            }
+        case _:
+            break
+        }
+    }
+
+    
+    return Response(status: .ok, body: "reply")
+}
+
+
+
+
+/*
 
 drop.post("callback"){ req in
     print(req);
@@ -293,7 +290,7 @@ drop.post("callback"){ req in
     return Response(status: .ok, body: "reply")
 }
 
-
+*/
 
 
 try drop.run()
