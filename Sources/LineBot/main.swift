@@ -12,52 +12,6 @@ public func randomInt(range:Int) -> Int {
 }
 
 
-//struct button: Codable {
-//    let type: String = "uri"
-//    let label: String = "Open"
-//    var uri: String
-//
-//    init(uri: String){
-//        self.uri = uri
-//    }
-//}
-//
-//struct column: Codable {
-//    var imageUrl: String
-//    var action: button
-//
-//    init(imageUrl: String, action: button) {
-//        self.imageUrl = imageUrl
-//        self.action = action
-//    }
-//}
-//
-//
-//struct template: Codable {
-//    let type: String = "image_carousel"
-//    var columns: [column]
-//
-//    init(columns: [column] = [column]()) {
-//        self.columns = columns
-//    }
-//
-//    mutating func addColumn(relative column: column) {
-//        columns.append(column)
-//    }
-//}
-//
-//
-//struct imageCarousel: Codable {
-//    let type: String = "template"
-//    var template: template
-//
-//    init(template: template) {
-//        self.template = template
-//    }
-//}
-
-
-
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
@@ -75,7 +29,8 @@ drop.post("callback"){ req in
         return Response(status: .ok, body: "this message is not supported")
     }
     
-    guard let message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
+    guard let message = object["message"]?.object?["text"]?.string,
+          let replyToken = object["replyToken"]?.string else{
         return Response(status: .ok, body: "this message is not supported")
     }
     
@@ -248,7 +203,7 @@ drop.post("callback"){ req in
             ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
     }
-    
+
     
     let response: Response = try drop.client.post(
         endpoint,
@@ -259,6 +214,7 @@ drop.post("callback"){ req in
         ],
         responseData
     )
+
     
     print(response)
     return Response(status: .ok, body: "reply")
