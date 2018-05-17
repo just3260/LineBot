@@ -12,10 +12,56 @@ public func randomInt(range:Int) -> Int {
 }
 
 
+//struct button: Codable {
+//    let type: String = "uri"
+//    let label: String = "Open"
+//    var uri: String
+//
+//    init(uri: String){
+//        self.uri = uri
+//    }
+//}
+//
+//struct column: Codable {
+//    var imageUrl: String
+//    var action: button
+//
+//    init(imageUrl: String, action: button) {
+//        self.imageUrl = imageUrl
+//        self.action = action
+//    }
+//}
+//
+//
+//struct template: Codable {
+//    let type: String = "image_carousel"
+//    var columns: [column]
+//
+//    init(columns: [column] = [column]()) {
+//        self.columns = columns
+//    }
+//
+//    mutating func addColumn(relative column: column) {
+//        columns.append(column)
+//    }
+//}
+//
+//
+//struct imageCarousel: Codable {
+//    let type: String = "template"
+//    var template: template
+//
+//    init(template: template) {
+//        self.template = template
+//    }
+//}
+
+
+
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
-let accessToken = "uNha8IMsykz/XoGmQhuWyvqVc6Ta36vi1yVCx16jH6Dfwu17iaJrQXZqipY8fgvMrxrxvtNcRKpVpmP/XyUtewpgpm40oQFxPSbaZDUbqb+mKSydSvjDgtbBxnKD+w/VrLugyzamDrBmgG7lw4lV/wdB04t89/1O/w1cDnyilFU="
+let accessToken = "OoFdWpqFaiTweCAZ78pVaxcGsNJrzBob0MFrQxHjbmFZmf3Hf1Mr0Z3Rt+CNdWBPHDAPkdCIlLOFfgfPcb22SPqx67yqhD+GBcwWhijCFmwUznCZxhe6Y8cM/HYp/JCyR/7pWcr17f+mab4gBM3ZtgdB04t89/1O/w1cDnyilFU="
 
 drop.get("hello") { req in
     print(req)
@@ -29,14 +75,13 @@ drop.post("callback"){ req in
         return Response(status: .ok, body: "this message is not supported")
     }
     
-    guard let message = object["message"]?.object?["text"]?.string,
-          let replyToken = object["replyToken"]?.string else{
+    guard let message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
         return Response(status: .ok, body: "this message is not supported")
     }
     
     print("-----------------");
     print(message);
-
+    
     var responseData: JSON = JSON()
     
     if (message == "抽"){
@@ -44,12 +89,12 @@ drop.post("callback"){ req in
         let imgur = try drop.client.get("https://api.imgur.com/3/album/mgKOf/images", query: [
             
             :],[
-            "Authorization" : "Client-ID e9a5ed48901c361"
+                "Authorization" : "Client-ID e9a5ed48901c361"
             ])
         guard let imgurData = imgur.data["data"]?.array else {
             return Response(status: .ok, body: "this message is not supported")
         }
-    
+        
         let temp = randomInt(range: imgurData.count)
         
         guard let picture = imgurData[temp].object?["link"] else {
@@ -64,14 +109,14 @@ drop.post("callback"){ req in
             ])
         
     } else if (message == "給我妹子"){
-
+        
         var index: String = ""
         var beautyPageArray = [String]()
         var imgurUrlArray = [String]()
         
         // 取得表特最新頁面的index
         let indexHtml = try drop.client.get("https://www.ptt.cc/bbs/Beauty/index.html")
-
+        
         let indexHtmlString = indexHtml.description
         let indexRange = indexHtmlString.range(of: ".html\">&lsaquo; 上頁")
         if let range = indexRange {
@@ -137,30 +182,30 @@ drop.post("callback"){ req in
         }
         
         
-//        // 點擊連結的網址
-//        let imageButton = button(uri: "https://www.google.com.tw")
-//
-//        // 從陣列中隨機抽出圖片
-//        let column1 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
-//        let column2 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
-//        let column3 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
-//
-//        var temp = template()
-//        temp.addColumn(relative: column1)
-//        temp.addColumn(relative: column2)
-//        temp.addColumn(relative: column3)
-//
-//        let carousel = imageCarousel(template: temp)
-//
-//        let encoder = JSONEncoder()
-//        let data = try! encoder.encode(carousel)
-//        guard let string = String(data: data, encoding: .utf8) else {
-//            return Response(status: .ok, body: "this message is not supported")
-//        }
+        //        // 點擊連結的網址
+        //        let imageButton = button(uri: "https://www.google.com.tw")
+        //
+        //        // 從陣列中隨機抽出圖片
+        //        let column1 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+        //        let column2 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+        //        let column3 = column(imageUrl: result[randomInt(range: result.count)], action: imageButton)
+        //
+        //        var temp = template()
+        //        temp.addColumn(relative: column1)
+        //        temp.addColumn(relative: column2)
+        //        temp.addColumn(relative: column3)
+        //
+        //        let carousel = imageCarousel(template: temp)
+        //
+        //        let encoder = JSONEncoder()
+        //        let data = try! encoder.encode(carousel)
+        //        guard let string = String(data: data, encoding: .utf8) else {
+        //            return Response(status: .ok, body: "this message is not supported")
+        //        }
         let mainPage = "https://www.ptt.cc/bbs/Beauty/index.html"
-//        let picture1 = result[randomInt(range: result.count)]
-//        let picture2 = result[randomInt(range: result.count)]
-//        let picture3 = result[randomInt(range: result.count)]
+        //        let picture1 = result[randomInt(range: result.count)]
+        //        let picture2 = result[randomInt(range: result.count)]
+        //        let picture3 = result[randomInt(range: result.count)]
         
         try responseData.set("replyToken", replyToken)
         try responseData.set("messages", [
@@ -190,11 +235,11 @@ drop.post("callback"){ req in
                                 "label": "Open",
                                 "uri": mainPage]]
                 ]
-            ]]
-        ])
+                ]]
+            ])
         
         print(responseData)
-
+        
         
     } else if (message.contains("黑人")||message.contains("歐郎")||message.contains("黑鬼")){
         
@@ -203,7 +248,7 @@ drop.post("callback"){ req in
             ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
     }
-
+    
     
     let response: Response = try drop.client.post(
         endpoint,
@@ -214,7 +259,6 @@ drop.post("callback"){ req in
         ],
         responseData
     )
-
     
     print(response)
     return Response(status: .ok, body: "reply")
