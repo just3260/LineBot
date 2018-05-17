@@ -63,6 +63,9 @@ let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
 let accessToken = "OoFdWpqFaiTweCAZ78pVaxcGsNJrzBob0MFrQxHjbmFZmf3Hf1Mr0Z3Rt+CNdWBPHDAPkdCIlLOFfgfPcb22SPqx67yqhD+GBcwWhijCFmwUznCZxhe6Y8cM/HYp/JCyR/7pWcr17f+mab4gBM3ZtgdB04t89/1O/w1cDnyilFU="
 
+let push = "https://api.line.me/v2/bot/message/push"
+
+
 drop.get("hello") { req in
     print(req)
     return "Hello Vapor!!!"
@@ -75,14 +78,30 @@ drop.post("callback"){ req in
         return Response(status: .ok, body: "this message is not supported")
     }
     
-    guard let message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
+//    guard let message = object["message"]?.object?["text"]?.string, let replyToken = object["replyToken"]?.string else{
+//        return Response(status: .ok, body: "this message is not supported")
+//    }
+    
+    guard let message = object["message"]?.object?["text"]?.string else {
         return Response(status: .ok, body: "this message is not supported")
     }
-    
+        
+    guard let replyToken = object["replyToken"]?.string else {
+        return Response(status: .ok, body: "this message is not supported")
+    }
+        
+    guard let userID = object["source"]?.object?["userId"]?.string else {
+            return Response(status: .ok, body: "this message is not supported")
+    }
+
+            
     print("-----------------");
     print(message);
     
     var responseData: JSON = JSON()
+    
+    // push Data
+    var pushData: JSON = JSON()
     
     if (message == "抽"){
         
@@ -106,6 +125,11 @@ drop.post("callback"){ req in
             ["type": "image",
              "originalContentUrl": picture,
              "previewImageUrl": picture]
+            ])
+        
+        try pushData.set("to", userID)
+        try pushData.set("messages", [
+            ["type": "text", "text": "我他媽的成功啦！！！"]
             ])
         
     } else if (message == "給我妹子"){
@@ -247,9 +271,14 @@ drop.post("callback"){ req in
         try responseData.set("messages", [
             ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
+    } else if (message == "你是誰"){
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", [
+            ["type": "text", "text": "\(userID)"]
+            ])
     }
-    
-    
+
+
     let response: Response = try drop.client.post(
         endpoint,
         query: ["name": "mybot"],
@@ -259,7 +288,7 @@ drop.post("callback"){ req in
         ],
         responseData
     )
-    
+
     print(response)
     return Response(status: .ok, body: "reply")
 }
