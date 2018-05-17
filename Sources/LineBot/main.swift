@@ -61,7 +61,7 @@ public func randomInt(range:Int) -> Int {
 
 let drop = try Droplet()
 let endpoint = "https://api.line.me/v2/bot/message/reply"
-let accessToken = "OoFdWpqFaiTweCAZ78pVaxcGsNJrzBob0MFrQxHjbmFZmf3Hf1Mr0Z3Rt+CNdWBPHDAPkdCIlLOFfgfPcb22SPqx67yqhD+GBcwWhijCFmwUznCZxhe6Y8cM/HYp/JCyR/7pWcr17f+mab4gBM3ZtgdB04t89/1O/w1cDnyilFU="
+let accessToken = "uNha8IMsykz/XoGmQhuWyvqVc6Ta36vi1yVCx16jH6Dfwu17iaJrQXZqipY8fgvMrxrxvtNcRKpVpmP/XyUtewpgpm40oQFxPSbaZDUbqb+mKSydSvjDgtbBxnKD+w/VrLugyzamDrBmgG7lw4lV/wdB04t89/1O/w1cDnyilFU="
 
 drop.get("hello") { req in
     print(req)
