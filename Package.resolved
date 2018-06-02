@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/vapor/bcrypt.git",
         "state": {
           "branch": null,
-          "revision": "3ee4aca16ba6ebfb1ad48cc5fd4dfb163c6d6be8",
-          "version": "1.1.0"
+          "revision": "a36b6f0381f2edb9fb32b8882ebc801ba8db10ef",
+          "version": "1.1.1"
         }
       },
       {
@@ -15,17 +15,8 @@
         "repositoryURL": "https://github.com/vapor/bits.git",
         "state": {
           "branch": null,
-          "revision": "c32f5e6ae2007dccd21a92b7e33eba842dd80d2f",
-          "version": "1.1.0"
-        }
-      },
-      {
-        "package": "CTLS",
-        "repositoryURL": "https://github.com/vapor/ctls.git",
-        "state": {
-          "branch": null,
-          "revision": "fddec6a4643d6e85b6bb6dc54b1b5cdbabd395d2",
-          "version": "1.1.2"
+          "revision": "03079476b04139a8b744ad96f975176df5ae12bc",
+          "version": "1.1.1"
         }
       },
       {
@@ -42,8 +33,8 @@
         "repositoryURL": "https://github.com/vapor/core.git",
         "state": {
           "branch": null,
-          "revision": "f9f3a585ab0ea5764b46d7a36d9c0d9d508b9c63",
-          "version": "2.2.0"
+          "revision": "aa15871311b497a24a7f0e96b1ae6865dd600818",
+          "version": "2.2.1"
         }
       },
       {
@@ -51,8 +42,17 @@
         "repositoryURL": "https://github.com/vapor/crypto.git",
         "state": {
           "branch": null,
-          "revision": "946edc6642d6825982a2f52a268a8ba9bd520a3d",
-          "version": "2.1.2"
+          "revision": "95e96b4d8e5c81da850db512a2fde167548f9094",
+          "version": "2.1.3"
+        }
+      },
+      {
+        "package": "CTLS",
+        "repositoryURL": "https://github.com/vapor/ctls.git",
+        "state": {
+          "branch": null,
+          "revision": "fba1297f4986a4dac8b02f7ac4e84a77fd492e4c",
+          "version": "1.1.3"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/vapor/engine.git",
         "state": {
           "branch": null,
-          "revision": "c10bff75382f8e1f9476e4a9ebc470e18842c844",
-          "version": "2.2.2"
+          "revision": "e44822c7516676d8bcb0141a6e248a88847b110c",
+          "version": "2.2.5"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/vapor/multipart.git",
         "state": {
           "branch": null,
-          "revision": "8e541b2e6fc64a3741eca2aa48ee2c3f23cbe17c",
-          "version": "2.1.1"
+          "revision": "1d98ad2205d0620fe2801048f76420572281e6e8",
+          "version": "2.2.1"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/vapor/node.git",
         "state": {
           "branch": null,
-          "revision": "c4ff32f07657aec849677e5aecb657bb6c85098d",
-          "version": "2.1.4"
+          "revision": "607aa595081da496f0f04a5c0cffd976e81d2e4e",
+          "version": "2.1.5"
         }
       },
       {
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/vapor/sockets.git",
         "state": {
           "branch": null,
-          "revision": "a77816695630a44d5d1393fc71eac37ac3d082ca",
-          "version": "2.2.2"
+          "revision": "79fc180cdcb451dbbb01b1156be36720adde80e0",
+          "version": "2.2.3"
         }
       },
       {
@@ -132,8 +132,8 @@
         "repositoryURL": "https://github.com/vapor/tls.git",
         "state": {
           "branch": null,
-          "revision": "02a47309249e69358aa3c28b5853897585d7a750",
-          "version": "2.1.2"
+          "revision": "a5981b0a370f227521330beb92b7ce6d636a1eb2",
+          "version": "2.1.3"
         }
       },
       {
@@ -141,8 +141,8 @@
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {
           "branch": null,
-          "revision": "a07dc83deb5acdb5dd06af5411db9a027fe083fd",
-          "version": "2.4.3"
+          "revision": "9ea2ca524f05e97c599ece90da504ac3f7e26d77",
+          "version": "2.4.4"
         }
       }
     ]
