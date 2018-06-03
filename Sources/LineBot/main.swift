@@ -266,7 +266,7 @@ drop.post("callback"){ req in
                 guard let log = member["battlesPlayed"]?.string else {
                     return Response(status: .ok, body: "this message is not supported")
                 }
-                if log == "0.0" {
+                if log == "0" || log == "0.0" {
                     guard let memberName = member["name"]?.string else {
                         return Response(status: .ok, body: "this message is not supported")
                     }
