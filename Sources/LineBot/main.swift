@@ -203,7 +203,7 @@ drop.post("callback"){ req in
         try responseData.set("messages", [
             ["type": "text", "text": "承翰歐巴，有人叫你～"]
             ])
-    }  else if (message == "Royale"){
+    } else if (message == "Royale"){
         
         let royale = try drop.client.get("https://api.royaleapi.com/clan/9R92GRQ", query: [
             
@@ -217,6 +217,32 @@ drop.post("callback"){ req in
         try responseData.set("replyToken", replyToken)
         try responseData.set("messages", [
             ["type": "text", "text": "\(name)"]
+            ])
+    } else if (message == "RoyaleDonate"){
+        
+        let royale = try drop.client.get("https://api.royaleapi.com/clan/9R92GRQ", query: [
+            
+            :],[
+                "Authorization" : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzI4LCJpZGVuIjoiNDUyNTc4MjU5NjI5MTEzMzcyIiwibWQiOnt9LCJ0cyI6MTUyNzk3NDUzNDQwMH0.xg2EAe8Zrw-li1iYusj-VB7cdqWZqRAyG86rPA6qM_w"
+            ])
+        guard let members = royale.data["members"]?.array else {
+            return Response(status: .ok, body: "this message is not supported")
+        }
+        
+        var memberValue = ""
+        for member in members {
+            guard let memberName = member["name"]?.string else {
+                return Response(status: .ok, body: "this message is not supported")
+            }
+            guard let value = member["donationsDelta"]?.string else {
+                return Response(status: .ok, body: "this message is not supported")
+            }
+            memberValue = memberValue + memberName + " : " + value + "\n"
+        }
+        
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", [
+            ["type": "text", "text": "\(memberValue)"]
             ])
     }
 
