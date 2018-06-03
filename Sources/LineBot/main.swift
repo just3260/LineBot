@@ -244,6 +244,42 @@ drop.post("callback"){ req in
         try responseData.set("messages", [
             ["type": "text", "text": "\(memberValue)"]
             ])
+    } else if (message == "RoyaleWar"){
+        
+        let royale = try drop.client.get("https://api.royaleapi.com/clan/9R92GRQ/warlog", query: [
+            
+            :],[
+                "Authorization" : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzI4LCJpZGVuIjoiNDUyNTc4MjU5NjI5MTEzMzcyIiwibWQiOnt9LCJ0cyI6MTUyNzk3NDUzNDQwMH0.xg2EAe8Zrw-li1iYusj-VB7cdqWZqRAyG86rPA6qM_w"
+            ])
+        guard let warLogs = royale.data[]?.array else {
+            return Response(status: .ok, body: "this message is not supported")
+        }
+        
+        var failMember = ""
+        var time = 1
+        for warlog in warLogs {
+            guard let members = warlog["participants"]?.array else {
+                return Response(status: .ok, body: "this message is not supported")
+            }
+            failMember = failMember + "======== -\(time) ========\n"
+            for member in members {
+                guard let log = member["battlesPlayed"]?.string else {
+                    return Response(status: .ok, body: "this message is not supported")
+                }
+                if log == "0.0" {
+                    guard let memberName = member["name"]?.string else {
+                        return Response(status: .ok, body: "this message is not supported")
+                    }
+                    failMember = failMember + memberName + "\n"
+                }
+            }
+            time = time + 1
+        }
+        
+        try responseData.set("replyToken", replyToken)
+        try responseData.set("messages", [
+            ["type": "text", "text": "\(failMember)"]
+            ])
     }
 
     
